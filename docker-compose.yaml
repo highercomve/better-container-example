@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  app:
+    container_name: better-container-example
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    volumes:
+      - ${PWD}:/gomod/app
+      - ${PWD}/go.mod:/gomod/app/go.mod
+      - ${PWD}/main.go:/gomod/app/main.go
+      - ${PWD}/utils:/gomod/app/utils/
+      - ${PWD}/static:/gomod/app/static/
+      - ${PWD}/templates:/gomod/app/templates/
+      - ${PWD}/demodata/pantavisor:/pantavisor/
+      - ${PWD}/demodata/storage:/storage/
+    ports:
+      - "5000:5000"
+    # env_file: 
+      # - ./env.default
+      # - ./.env.local

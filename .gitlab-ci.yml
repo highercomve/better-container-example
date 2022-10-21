@@ -1,0 +1,25 @@
+stages:
+  - build
+  - deploy
+
+image: jdrouet/docker-with-buildx:latest
+
+services:
+  - docker:dind
+
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+  CONTAINER_IMAGE: registry.gitlab.com/$CI_PROJECT_PATH
+  GIT_SUBMODULE_STRATEGY: recursive
+  K8S_DEFAULT_PREFIX: simplefleet
+  K8S_DEFAULT_NS: simplefleet
+
+build-branch:
+  stage: build
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+  script:
+    - docker buildx create --use
+    - docker buildx build --platform linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/mips,linux/riscv64 --push -f Dockerfile --build-arg NS=branch --cache-from $CONTAINER_IMAGE:$CI_BUILD_REF_SLUG --tag $CONTAINER_IMAGE:$CI_BUILD_REF_SLUG-$CI_BUILD_REF --tag $CONTAINER_IMAGE:$CI_BUILD_REF_SLUG .
+    - test -n "$CI_BUILD_TAG" && docker tag $CONTAINER_IMAGE:$CI_BUILD_REF_SLUG-$CI_BUILD_REF $CONTAINER_IMAGE:$CI_BUILD_TAG || true

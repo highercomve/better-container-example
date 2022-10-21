@@ -1,0 +1,34 @@
+{{define "layout"}}
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{{template "title"}}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet"> 
+  <link rel="stylesheet" href="/static/stylesheets/main.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <section class="container">
+        <div class="flex justify-content-center">
+          <h1>Better containers example</h1>
+        </div>
+      </section>
+    </nav>
+  </header>
+  <section class="container">
+    {{template "body" .}}
+  </section>
+  <footer class="pb-4 mb-4">
+    <section class="container">
+      <div class="flex justify-content-center ">
+        Made by highercomve with love
+      </div>
+    </section>
+  </footer>
+</body>
+</html>
+{{end}}

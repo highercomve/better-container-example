@@ -1,0 +1,53 @@
+{{define "title"}}Welcome to better-container-example container{{end}}
+
+{{define "body"}}
+
+<link rel="stylesheet" href="/static/stylesheets/highlight.min.css">
+<script src="/static/js/highlight.min.js"></script>
+
+<script>
+  window.onload = function() {
+    hljs.highlightAll()
+  };
+</script>
+
+<div class="flex justify-content-flex-start">
+  <header class="col-12 mt-6 pl-2 pr-2">
+    <h1>Congratulations!</h1>
+    <p>If you're reading this page, rhe application is running correctly</p>
+  </header>
+
+  <section class="col-12 bg-grey color-white p-2 border-radius-1 mt-2 mb-2">
+    <header>
+      <h1 class="mb-2">Aplication info</h1>
+    </header>    
+    <ul class="list-style-none ml-0 pl-0">
+      <li class="data-table">
+        <span class="label">OS</span>
+        <span class="data">{{.OS}}</span>
+      </li>
+      <li class="data-table">
+        <span class="label">Architecture</span>
+        <span class="data">{{.Machine}}</span>
+      </li>
+      <li class="data-table">
+        <span class="label">Kernel</span>
+        <span class="data">{{.Kernel}}</span>
+      </li>
+      <li class="data-table">
+        <span class="label">Interfaces</span>
+        <span class="data">
+          {{range $item, $key := .Interfaces}}
+<pre>
+{{$key.Name}} Flags={{$key.Flags}}
+  Mac Address: {{$key.HardwareAddr}} 
+  IP Address: {{range $item, $a := $key.Addr}}
+    {{$a}}{{end}}
+</pre>
+          {{end}}
+        </span>
+      </li>
+    </ul>
+  </section>
+</div>
+{{end}}

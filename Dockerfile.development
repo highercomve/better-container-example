@@ -1,0 +1,31 @@
+FROM golang
+
+RUN apk update; \
+	apk add --update \
+        curl \
+        openssl \
+		openrc \
+		ca-certificates \
+        socat \
+        jq
+
+# install dockerize
+ENV DOCKERIZE_VERSION v0.6.1
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+
+COPY air /gomod/air
+WORKDIR /gomod/air
+
+# install air
+RUN go get; /gomod/air/install.sh
+
+WORKDIR /app
+COPY go.mod /app/
+COPY main.go /app/
+COPY utils /app/
+COPY static /app/static/
+COPY templates /app/templates/
+
+CMD ["dockerize", "air", "-d"]
